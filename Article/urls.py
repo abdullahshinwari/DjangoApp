@@ -3,6 +3,7 @@ from Article import views
 
 
 urlpatterns = [
+    path('', views.hello_world),
     path('hello', views.hello_world),
     path('create-user', views.create_user),
     path('show-all-users', views.show_all_users),
