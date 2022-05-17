@@ -44,6 +44,7 @@ def show_user(request):
 def show_all_users(request):
     users = Users.objects.all()
     users_serializer = UsersSerializer(users, many=True)
+    # print(users.query) // to print raw sql query
     return JsonResponse(users_serializer.data, safe=False)
 
 
