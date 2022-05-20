@@ -84,11 +84,12 @@ def moralis_api(request):
         to_block = request.POST['to_block']
         response = get_block_page(from_block, to_block)
         while keep_fetching:
-            if response != None:
+            print(response['cursor'])
+            if response['cursor']:
                 response = get_block_page(from_block, to_block, response['cursor'])
                 continue
             keep_fetching = False
-        return Response(response)
+        return Response({"message": "database is populated !!!"})
 
 
         # api_key = 'KxNtf5bwDTmZ9ucCxXLv1l9cuFTSAiR4xPetY6n6l2rboWUqQjMyQJ0eBcgBNAoe'

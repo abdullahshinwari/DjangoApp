@@ -16,6 +16,7 @@ def get_block_page(from_block, to_block, cursor=''):
     if cursor != '':
         url = url + '&cursor=' + cursor
     all_blocks = []
+    print(url)
     response = requests.get(url=url, headers={"X-API-Key": api_key})
     if response.status_code != 200:
         return to_json(data="", message='Error', status_code=400)  # dummy status code
@@ -39,5 +40,5 @@ def get_block_page(from_block, to_block, cursor=''):
             verified=block['verified'],
             operator=block['operator']
         ))
-        Blocks.objects.bulk_create(all_blocks, ignore_conflicts=True)
-        return block_data
+    Blocks.objects.bulk_create(all_blocks, ignore_conflicts=True)
+    return block_data
