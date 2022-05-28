@@ -11,4 +11,5 @@ urlpatterns = [
     path('update-user', views.update_user),
     path('delete-user', views.delete_user),
     path('moralis-api', views.moralis_api),
+    path('moralis-latest-block', views.moralis_latest_block),
 ]

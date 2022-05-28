@@ -10,7 +10,7 @@ from rest_framework.parsers import JSONParser
 from Article.models import Users, Articles, Blocks
 from Article.serializers import UsersSerializer, ArticlesSerializer, BlocksSerializer
 from utils import to_json
-from Article.utils import get_block_page
+from Article.utils import get_block_page, get_latest_block
 
 
 # Create your views here.
@@ -90,42 +90,32 @@ def moralis_api(request):
                 continue
             keep_fetching = False
         return Response({"message": "database is populated !!!"})
-
-
-        # api_key = 'KxNtf5bwDTmZ9ucCxXLv1l9cuFTSAiR4xPetY6n6l2rboWUqQjMyQJ0eBcgBNAoe'
-        # url = ('https://deep-index.moralis.io/api/v2/nft/transfers?chain=eth&from_block=10000000&to_block=10001000&format=decimal')
-        #
-        # all_blocks = []
-        # response = requests.get(url=url, headers={"X-API-Key": api_key})
-        # if response.status_code != 200:
-        #     return to_json(data="", message='Error', status_code=400)  # dummy status code
-        # block_data = response.json()
-        # for block in block_data['result']:
-        #     all_blocks.append(Blocks(
-        #         block_number=block['block_number'],
-        #         block_timestamp=block['block_timestamp'],
-        #         block_hash=block['block_hash'],
-        #         transaction_hash=block['transaction_hash'],
-        #         transaction_index=block['transaction_index'],
-        #         log_index=block['log_index'],
-        #         value=block['value'],
-        #         contract_type=block['contract_type'],
-        #         transaction_type=block['transaction_type'],
-        #         token_address=block['token_address'],
-        #         token_id=block['token_id'],
-        #         from_address=block['from_address'],
-        #         to_address=block['to_address'],
-        #         amount=block['amount'],
-        #         verified=block['verified'],
-        #         operator=block['operator']
-        #     ))
-        #     # if block_serializer.is_valid():
-        #     #     block_serializer.save()
-        # Blocks.objects.bulk_create(all_blocks, ignore_conflicts=True)
-        # print('after append')
     except ConnectionError as e:
         return to_json(data="", message=e, status_code=400)  # dummy status code
-    # return Response({"data": "all_blocks"})
+
+
+# call moralis api
+@api_view(["GET"])
+def moralis_latest_block(request):
+    try:
+        blocks = Blocks.objects.all().order_by('-block_number').first()
+        blocks_serializer = BlocksSerializer(blocks)
+        # for data in blocks_serializer.data:
+        print(blocks_serializer.data['block_number'] + 1)
+        return JsonResponse(blocks_serializer.data)
+    except ConnectionError as e:
+        return to_json(data="", message=e, status_code=400)  # dummy status code
+
+
+
+
+
+
+
+
+
+
+
 
 
 
